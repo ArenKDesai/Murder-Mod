@@ -1,0 +1,10 @@
+C:\Users\arenk\source\repos\MurderMod\MurderMod\bin\Debug\net5.0\MurderMod.deps.json
+C:\Users\arenk\source\repos\MurderMod\MurderMod\bin\Debug\net5.0\MurderMod.dll
+C:\Users\arenk\source\repos\MurderMod\MurderMod\bin\Debug\net5.0\MurderMod.pdb
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.csproj.AssemblyReference.cache
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.AssemblyInfoInputs.cache
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.AssemblyInfo.cs
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.csproj.CoreCompileInputs.cache
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.dll
+C:\Users\arenk\source\repos\MurderMod\MurderMod\obj\Debug\net5.0\MurderMod.pdb
