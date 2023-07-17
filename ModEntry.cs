@@ -47,26 +47,29 @@ namespace MurderMod
 
         private void KillNPC(NPC npc)
         {
-            npc.isEmoting = false;
-
             // Could make it so dead NPCs don't show up on the map, but adding a corpse sprite is more fun
             //npc.HideShadow = true;
             //npc.IsInvisible = true;
             //npc.Position = new Microsoft.Xna.Framework.Vector2(-1000, -1000);
-            npc.faceDirection(2);
-            npc.Sprite.LoadTexture(Path.Combine(this.Helper.DirectoryPath, "dead_npc"));
-            npc.Sprite.SourceRect = new Microsoft.Xna.Framework.Rectangle(0, 0, 16, 32);
-            npc.Sprite.UpdateSourceRect();
-            justDied = null;
-            string deadStatusFilePath = Path.Combine(this.Helper.DirectoryPath, "dead.txt");
-            string deadStatusTxt = File.ReadAllText(deadStatusFilePath);
-            List<string> deadNpcNames = new List<string>(deadStatusTxt.Split(Environment.NewLine));
-            if (!deadNpcNames.Contains(npc.name))
-                File.WriteAllText(
-                    deadStatusFilePath,
-                    deadStatusTxt + Environment.NewLine + npc.name
-                );
-            npc.stopWithoutChangingFrame();
+            try
+            {
+                npc.faceDirection(2);
+                npc.Sprite.LoadTexture(Path.Combine(this.Helper.DirectoryPath, "dead_npc"));
+                npc.Sprite.SourceRect = new Microsoft.Xna.Framework.Rectangle(0, 0, 16, 32);
+                npc.Sprite.UpdateSourceRect();
+                justDied = null;
+                string deadStatusFilePath = Path.Combine(this.Helper.DirectoryPath, "dead.txt");
+                string deadStatusTxt = File.ReadAllText(deadStatusFilePath);
+                List<string> deadNpcNames = new List<string>(deadStatusTxt.Split(Environment.NewLine));
+                if (!deadNpcNames.Contains(npc.name))
+                    File.WriteAllText(
+                        deadStatusFilePath,
+                        deadStatusTxt + Environment.NewLine + npc.name
+                    );
+                npc.stopWithoutChangingFrame();
+                justKilled = false;
+            }
+            catch {}
         }
 
         /**
@@ -81,10 +84,7 @@ namespace MurderMod
 
             foreach (string npc in deadNpcNames)
             {
-                if (Game1.getCharacterFromName(npc) == null)
-                {
-                    this.Monitor.Log("NPC not found: " + npc, LogLevel.Debug);
-                }
+
 
                 var character = Game1.getCharacterFromName(npc);
                 if (character == null)
@@ -92,7 +92,61 @@ namespace MurderMod
 
                 if (deadNpcNames.Contains(character.Name) && character is NPC)
                 {
-                    KillNPC(character as NPC);
+                    character.Sprite.LoadTexture(Path.Combine(this.Helper.DirectoryPath, "dead_npc"));
+                    character.Sprite.SourceRect = new Microsoft.Xna.Framework.Rectangle(0, 0, 16, 32);
+                    character.Sprite.UpdateSourceRect();
+                    character.Halt();
+                    character.farmerPassesThrough = true;
+                    character.CurrentDialogue.Clear();
+                    character.controller = null;
+                    character.isEmoting = false;
+
+                    Dictionary<int, SchedulePathDescription> schedule = new Dictionary<
+                        int,
+                        SchedulePathDescription
+                    >
+                {
+                    {
+                        0,
+                        new SchedulePathDescription(
+                            new Stack<Point>(),
+                            character.DefaultFacingDirection,
+                            "lin",
+                            character.Name + " appears cold and unmoving..."
+                        )
+                    },
+                    {
+                        1,
+                        new SchedulePathDescription(
+                            new Stack<Point>(),
+                            character.DefaultFacingDirection,
+                            "lin",
+                            character.Name + " appears cold and unmoving..."
+                        )
+                    },
+                    {
+                        2,
+                        new SchedulePathDescription(
+                            new Stack<Point>(),
+                            character.DefaultFacingDirection,
+                            "lin",
+                            character.Name + " appears cold and unmoving..."
+                        )
+                    },
+                    {
+                        3,
+                        new SchedulePathDescription(
+                            new Stack<Point>(),
+                            character.DefaultFacingDirection,
+                            "lin",
+                            character.Name + " appears cold and unmoving..."
+                        )
+                    }
+                };
+                    (character as NPC).Schedule = schedule;
+                    character.faceDirection(2);
+
+
                 }
             }
         }
@@ -126,7 +180,6 @@ namespace MurderMod
                 }
                 if (npc == null || npc is Pet || npc is Horse)
                 {
-                    this.Monitor.Log("Failed to kill an NPC", LogLevel.Debug);
                 }
                 else
                 {
@@ -153,7 +206,6 @@ namespace MurderMod
             {
                 if (Game1.player.UsingTool)
                 {
-                    this.Monitor.Log(Game1.player.CurrentTool.getCategoryName(), LogLevel.Debug);
                 }
                 if (
                     Game1.player.UsingTool
